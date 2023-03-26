@@ -1,0 +1,99 @@
+name: future-pinball
+title: Future Pinball
+version: "1.59"
+summary: HP 48 calculator emulator
+description: |
+  HP 48 calculator emulator
+
+  Key Features:
+
+  - Viewer: View photos in your folder, create a slideshow
+  - Editor: resizing, brightness and color adjustment, white balance, backlight correction, frames, balloons, mosaic mode, adding text, drawing pictures, cropping, filters, red eye removal, blooming, paint brush, clone stamp, effect brush
+  - Batch editor: Batch edit multiple photos
+  - Page: Merge multiple photos on the page frame to create one final photo
+  - Combine: Attach multiple photos vertically or horizontally to create one final photo
+  - Animated GIF: Use multiple photos to create a final animated photo
+  - Print: Print portrait shots, carte de visites(CDV), passport photos
+  - Splitter: Slice a photo into several pieces
+  - Screen Capture: Capture your screenshot and save it
+  - Color Picker: Zoom in on images, search and pick a color
+  - Rename: Change photo file names in batch mode
+  - Raw Converter: Convert RAW to JPG
+  - Paper Print: Print lined, graph, music and calendar paper
+  - Face Search: Find similar faces on the Internet
+
+  *Note: This Windows application runs on Linux using the Wine compatibility layer.*
+grade: stable
+icon: future-pinball_icon.png
+
+base: core18
+confinement: strict
+
+architectures:
+  - build-on: amd64
+  - build-on: i386
+
+environment:
+  WINEDLLOVERRIDES: "$WINEDLLOVERRIDES;mscoree,mshtml="    # Prevent pop-ups about Wine Mono and Wine Gecko
+  SOMMELIER_STRICT: "1"                                    # Make Sommelier exit when unset variable is used. (useful to find bugs in sommelier)
+
+apps:
+  install-hp48-roms:
+    command: install-roms
+  future-pinball:
+    extensions: [ gnome-3-28 ]
+    command: bin/sommelier run-exe
+    environment:
+      RUN_EXE: "C:/Program Files (x86)/HP-Emulators/Emu48/Emu48.exe"
+      INSTALL_EXE: "$SNAP/FuturePinballSetup_v1.9.1.20101231.exe"
+      INSTALL_FLAGS: "/S"
+    plugs:
+      - home
+      - network
+      - network-bind
+      - removable-media
+      - cups
+  # The wine command can be used to run applications inside the wine
+  # environment that this snap uses.
+  #
+  # For example, users can configure the wine environment of this snap
+  # by running `myapp.wine winecfg`.
+  wine:
+    extensions: [ gnome-3-28 ]
+    command: bin/sommelier
+    plugs:
+      - home
+      - network
+      - network-bind
+      - removable-media
+      - cups
+ # The winetricks command can be used to run winetricks inside the wine
+  # environment that this snap uses.
+  winetricks:
+    extensions: [ gnome-3-28 ]
+    command: bin/sommelier winetricks
+    plugs:
+      - network
+
+parts:
+  installer:
+    plugin: dump
+    source: ./
+
+  # The sommelier script helps you snap Windows applications using Wine. It 
+  # initializes and configures Wine and installs the Windows application.
+  sommelier:
+    plugin: make
+    source: https://github.com/snapcrafters/sommelier-core.git
+
+# These plugs are used to connect the snap to the wine runtime.
+plugs:
+  wine-runtime:
+    interface: content
+    target: $SNAP/wine-runtime
+    default-provider: wine-platform-runtime
+  wine-5-stable:
+    interface: content
+    target: $SNAP/wine-platform
+    default-provider: wine-platform-5-stable
+
