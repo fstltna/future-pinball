@@ -1,28 +1,10 @@
 name: future-pinball
 title: Future Pinball
 version: "1.59"
-summary: HP 48 calculator emulator
+summary:  Future Pinball game creation tool
 description: |
-  HP 48 calculator emulator
+  Future Pinball game creation tool
 
-  Key Features:
-
-  - Viewer: View photos in your folder, create a slideshow
-  - Editor: resizing, brightness and color adjustment, white balance, backlight correction, frames, balloons, mosaic mode, adding text, drawing pictures, cropping, filters, red eye removal, blooming, paint brush, clone stamp, effect brush
-  - Batch editor: Batch edit multiple photos
-  - Page: Merge multiple photos on the page frame to create one final photo
-  - Combine: Attach multiple photos vertically or horizontally to create one final photo
-  - Animated GIF: Use multiple photos to create a final animated photo
-  - Print: Print portrait shots, carte de visites(CDV), passport photos
-  - Splitter: Slice a photo into several pieces
-  - Screen Capture: Capture your screenshot and save it
-  - Color Picker: Zoom in on images, search and pick a color
-  - Rename: Change photo file names in batch mode
-  - Raw Converter: Convert RAW to JPG
-  - Paper Print: Print lined, graph, music and calendar paper
-  - Face Search: Find similar faces on the Internet
-
-  *Note: This Windows application runs on Linux using the Wine compatibility layer.*
 grade: stable
 icon: future-pinball_icon.png
 
@@ -38,15 +20,13 @@ environment:
   SOMMELIER_STRICT: "1"                                    # Make Sommelier exit when unset variable is used. (useful to find bugs in sommelier)
 
 apps:
-  install-hp48-roms:
-    command: install-roms
   future-pinball:
     extensions: [ gnome-3-28 ]
     command: bin/sommelier run-exe
     environment:
-      RUN_EXE: "C:/Program Files (x86)/HP-Emulators/Emu48/Emu48.exe"
+      RUN_EXE: "C:/Games/Future Pinball/Future Pinball.exe"
       INSTALL_EXE: "$SNAP/FuturePinballSetup_v1.9.1.20101231.exe"
-      INSTALL_FLAGS: "/S"
+      #INSTALL_FLAGS: "/S"
     plugs:
       - home
       - network
